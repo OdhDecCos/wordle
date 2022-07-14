@@ -70,7 +70,7 @@ a {
     font-weight: bold;
     vertical-align: middle;
     box-sizing: border-box;
-    border: 2px solid gray;
+    border: 2px solid dimgray;
 }
 
 .tile[data-tile = 'correct'],
@@ -78,12 +78,13 @@ a {
     background-color: var(--clr-tile-correct);
 }
 
-.tile[data-tile = 'present'] {
+.tile[data-tile = 'present'],
+.key[data-tile = 'present'] {
     background-color: var(--clr-tile-present);
 }
 
 .tile[data-tile = 'absent'],
-.key[data-tile = 'correct'] {
+.key[data-tile = 'absent'] {
     background-color: var(--clr-tile-absent);
 }
 
