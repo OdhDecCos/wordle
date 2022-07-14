@@ -1,3 +1,9 @@
+:root {
+    --clr-tile-absent: #3a3a3c;
+    --clr-tile-correct: #538d4e;
+    --clr-tile-present: #b59f3b;
+}
+
 body {
     background: black;
     color: white;
@@ -65,6 +71,20 @@ a {
     vertical-align: middle;
     box-sizing: border-box;
     border: 2px solid gray;
+}
+
+.tile[data-tile = 'correct'],
+.key[data-tile = 'correct'] {
+    background-color: var(--clr-tile-correct);
+}
+
+.tile[data-tile = 'present'] {
+    background-color: var(--clr-tile-present);
+}
+
+.tile[data-tile = 'absent'],
+.key[data-tile = 'correct'] {
+    background-color: var(--clr-tile-absent);
 }
 
 #keyboard-container {
