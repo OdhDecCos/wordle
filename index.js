@@ -9,7 +9,9 @@ let keyObj = {};
 let pos = 0;
 let line = 0;
 let word = "";
-let goal = "liver";
+let goal = "voice";
+
+
 
 function colourTiles(word, line, keyNum) {
     for (let i = 0; i < word.length; i++) {
@@ -42,15 +44,20 @@ async function clicked(keyNum) {
             return;
         }
         let isWord;
+        if (word === goal) {
+            win = true;
+            colourTiles(word, line, keyNum);
+            message.innerHTML = "Congrats!";
+            toastBar.setAttribute("data-visible", true);
+            return;
+        }
         await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + word)
             .then(res => {
                 if (res.ok) { isWord = true; } else { isWord = false; }
             });
         if (isWord) {
             colourTiles(word, line, keyNum);
-            if (word === goal) {
-                win = true;
-            } else if (line === 5) {
+            if (line === 5) {
                 message.innerHTML = goal.toUpperCase();
                 toastBar.setAttribute("data-visible", true);
                 return;
@@ -76,21 +83,27 @@ async function clicked(keyNum) {
     }
 }
 
-for (let i = 0; i < keys.length; i++) {
-    keys[i].onclick = function () { clicked(i) };
-    keyObj[keys[i].innerHTML] = i;
-}
-
-window.addEventListener("keydown", function (event) {
-    if (event.defaultPrevented) {
-        return;
+fetch("https://random-word-api.herokuapp.com/word?length=5&lang=en")
+.then(res => res.json())
+.then(data => {
+    goal = data[0];
+    for (let i = 0; i < keys.length; i++) {
+        keys[i].onclick = function () { clicked(i) };
+        keyObj[keys[i].innerHTML] = i;
     }
+    
+    window.addEventListener("keydown", function (event) {
+        if (event.defaultPrevented) {
+            return;
+        }
+    
+        let press = event.key.toLowerCase();
+    
+        if (press === 'enter' || press === 'backspace'
+            || (press >= "a" && press <= 'z' && press.length === 1)) {
+            clicked(keyObj[press]);
+        }
+        event.preventDefault();
+    }, true);
+});
 
-    let press = event.key.toLowerCase();
-
-    if (press === 'enter' || press === 'backspace'
-        || (press >= "a" && press <= 'z' && press.length === 1)) {
-        clicked(keyObj[press]);
-    }
-    event.preventDefault();
-}, true);
